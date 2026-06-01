@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS incoming_goods;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS operators;
+

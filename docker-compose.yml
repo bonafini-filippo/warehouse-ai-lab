@@ -1,0 +1,40 @@
+services:
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: warehouse-web
+    restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.warehouse-web.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.warehouse-web.entrypoints=web"
+      - "traefik.http.routers.warehouse-web.priority=1"
+      - "traefik.http.services.warehouse-web.loadbalancer.server.port=80"
+
+  api:
+    build:
+      context: ./services/api
+      dockerfile: Dockerfile
+    container_name: warehouse-api
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - proxy
+      - infra_db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.warehouse-api.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.warehouse-api.entrypoints=web"
+      - "traefik.http.routers.warehouse-api.priority=100"
+      - "traefik.http.services.warehouse-api.loadbalancer.server.port=3000"
+
+networks:
+  proxy:
+    external: true
+
+  infra_db:
+    external: true
