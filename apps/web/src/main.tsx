@@ -53,7 +53,7 @@ function App() {
     <main className="page">
       <section className="hero">
         <div>
-          <p className="eyebrow">Warehouse AI Lab di Bona e zul</p>
+          <p className="eyebrow">Warehouse Lab di Bona e zul</p>
           <h1>Dashboard magazzino</h1>
           <p className="subtitle">
             Mini app React collegata al backend Go, che legge i dati da
