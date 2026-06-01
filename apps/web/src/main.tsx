@@ -8,7 +8,7 @@ import {
   PackageCheck,
   RefreshCw,
   Send,
-  Truck
+  Truck,
 } from "lucide-react";
 import "./styles.css";
 
@@ -19,11 +19,11 @@ type DashboardSummary = {
 };
 
 function App() {
-  const [summary, setSummary] = useState<DashboardSummary | null>(null);
+  const [summary, setSummary] = (useState < DashboardSummary) | (null > null);
   const [loading, setLoading] = useState(true);
   const [chatOpen, setChatOpen] = useState(true);
   const [message, setMessage] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = (useState < string) | (null > null);
 
   async function loadSummary() {
     try {
@@ -53,11 +53,11 @@ function App() {
     <main className="page">
       <section className="hero">
         <div>
-          <p className="eyebrow">Warehouse AI Lab</p>
+          <p className="eyebrow">Warehouse AI Lab di Bona</p>
           <h1>Dashboard magazzino</h1>
           <p className="subtitle">
-            Mini app React collegata al backend Go, che legge i dati da PostgreSQL
-            tramite rete Docker interna.
+            Mini app React collegata al backend Go, che legge i dati da
+            PostgreSQL tramite rete Docker interna.
           </p>
         </div>
 
@@ -119,10 +119,15 @@ function App() {
                 <Bot size={20} />
                 <h2>AI Assistant</h2>
               </div>
-              <p>Mock UI per il prossimo step: function calling verso il backend.</p>
+              <p>
+                Mock UI per il prossimo step: function calling verso il backend.
+              </p>
             </div>
 
-            <button className="toggleButton" onClick={() => setChatOpen(!chatOpen)}>
+            <button
+              className="toggleButton"
+              onClick={() => setChatOpen(!chatOpen)}
+            >
               {chatOpen ? "Nascondi" : "Apri"}
             </button>
           </div>
@@ -141,7 +146,9 @@ function App() {
 
                 <div className="message assistant">
                   Dal database risultano{" "}
-                  <strong>{summary?.availableOperatorsTomorrow ?? "..."}</strong>{" "}
+                  <strong>
+                    {summary?.availableOperatorsTomorrow ?? "..."}
+                  </strong>{" "}
                   operatori disponibili domani.
                 </div>
               </div>
@@ -174,7 +181,7 @@ function MetricCard({
   title,
   value,
   loading,
-  icon
+  icon,
 }: {
   title: string;
   value?: number;
@@ -186,7 +193,7 @@ function MetricCard({
       <div className="iconBox">{icon}</div>
       <p>{title}</p>
       <strong>
-        {loading ? <Loader2 className="spin" size={28} /> : value ?? "-"}
+        {loading ? <Loader2 className="spin" size={28} /> : (value ?? "-")}
       </strong>
     </article>
   );
