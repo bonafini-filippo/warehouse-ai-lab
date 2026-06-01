@@ -1,0 +1,15 @@
+name: Deploy Warehouse AI Lab
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, warehouse-ai-lab]
+
+    steps:
+      - name: Deploy on Ubuntu lab server
+        run: |
+          /home/bona/scripts/deploy-project.sh warehouse-ai-lab main
