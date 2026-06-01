@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: warehouse-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_DEV_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_DEV_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DEV_DB}
+    ports:
+      - "${POSTGRES_DEV_PORT}:5432"
+    volumes:
+      - warehouse_postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_DEV_USER} -d ${POSTGRES_DEV_DB}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./services/api
+      dockerfile: Dockerfile
+    container_name: warehouse-api-dev
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_DEV_USER}:${POSTGRES_DEV_PASSWORD}@postgres:5432/${POSTGRES_DEV_DB}?sslmode=disable
+    ports:
+      - "${API_PORT}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: warehouse-web-dev
+    restart: unless-stopped
+    ports:
+      - "${WEB_DEV_PORT}:80"
+    depends_on:
+      - api
+
+volumes:
+  warehouse_postgres_dev_data:
