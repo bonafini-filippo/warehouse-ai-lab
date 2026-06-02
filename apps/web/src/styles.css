@@ -2,24 +2,50 @@
     box-sizing: border-box;
 }
 
+:root {
+    --bg: #090b10;
+    --panel: rgba(18, 24, 31, 0.78);
+    --panel-strong: rgba(23, 31, 40, 0.92);
+    --line: rgba(213, 226, 214, 0.13);
+    --text: #eef5ec;
+    --muted: #9faca7;
+    --teal: #22d3c6;
+    --lime: #b8f36b;
+    --coral: #ff735c;
+    --amber: #f7c948;
+    --shadow: rgba(0, 0, 0, 0.34);
+}
+
 body {
     margin: 0;
     font-family:
-        Inter,
+        "Aptos",
+        "Segoe UI",
         ui-sans-serif,
         system-ui,
         -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
         sans-serif;
     background:
-        radial-gradient(
-            circle at top left,
-            rgba(79, 70, 229, 0.25),
-            transparent 35%
-        ),
-        #08111f;
-    color: #e5edf7;
+        linear-gradient(115deg, rgba(34, 211, 198, 0.12), transparent 32%),
+        radial-gradient(circle at 84% 12%, rgba(255, 115, 92, 0.22), transparent 28%),
+        radial-gradient(circle at 8% 84%, rgba(184, 243, 107, 0.12), transparent 30%),
+        var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+body::before {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+    background-image:
+        linear-gradient(rgba(238, 245, 236, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(238, 245, 236, 0.035) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent 78%);
+    animation: gridDrift 18s linear infinite;
 }
 
 button,
@@ -31,6 +57,7 @@ input {
     width: min(1180px, calc(100% - 32px));
     margin: 0 auto;
     padding: 48px 0;
+    animation: pageIn 680ms ease-out both;
 }
 
 .hero {
@@ -43,10 +70,10 @@ input {
 
 .eyebrow {
     margin: 0 0 8px;
-    color: #8ab4ff;
+    color: var(--lime);
     font-size: 14px;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
 }
 
@@ -54,12 +81,14 @@ h1 {
     margin: 0;
     font-size: clamp(36px, 6vw, 64px);
     line-height: 0.95;
+    text-wrap: balance;
+    text-shadow: 0 18px 48px rgba(34, 211, 198, 0.14);
 }
 
 .subtitle {
     max-width: 720px;
     margin: 18px 0 0;
-    color: #9fb0c8;
+    color: var(--muted);
     font-size: 18px;
     line-height: 1.6;
 }
@@ -68,10 +97,15 @@ h1 {
 .toggleButton,
 .chatInput button {
     border: 0;
-    border-radius: 14px;
+    border-radius: 8px;
     cursor: pointer;
-    color: white;
-    background: #9267fb;
+    color: #061011;
+    background: linear-gradient(135deg, var(--teal), var(--lime));
+    box-shadow: 0 18px 46px rgba(34, 211, 198, 0.22);
+    transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        filter 180ms ease;
 }
 
 .refreshButton {
@@ -80,6 +114,20 @@ h1 {
     gap: 10px;
     padding: 12px 16px;
     white-space: nowrap;
+}
+
+.refreshButton:hover,
+.toggleButton:hover,
+.chatInput button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 54px rgba(184, 243, 107, 0.22);
+    filter: saturate(1.12);
+}
+
+.refreshButton:active,
+.toggleButton:active,
+.chatInput button:active {
+    transform: translateY(0) scale(0.98);
 }
 
 .grid {
@@ -92,20 +140,62 @@ h1 {
 .card,
 .panel,
 .errorBox {
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    border-radius: 26px;
-    background: rgba(15, 23, 42, 0.72);
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background:
+        linear-gradient(140deg, rgba(255, 255, 255, 0.055), transparent 38%),
+        var(--panel);
+    box-shadow: 0 24px 80px var(--shadow);
     backdrop-filter: blur(18px);
 }
 
 .card {
+    position: relative;
+    overflow: hidden;
     padding: 24px;
+    animation: cardIn 560ms ease-out both;
+    transition:
+        transform 220ms ease,
+        border-color 220ms ease,
+        background 220ms ease;
+}
+
+.card:nth-child(2) {
+    animation-delay: 90ms;
+}
+
+.card:nth-child(3) {
+    animation-delay: 180ms;
+}
+
+.card::after {
+    position: absolute;
+    inset: auto 18px 0;
+    height: 3px;
+    content: "";
+    background: linear-gradient(90deg, var(--teal), var(--coral), var(--lime));
+    opacity: 0.78;
+    transform: scaleX(0.45);
+    transform-origin: left;
+    transition: transform 260ms ease;
+}
+
+.card:hover,
+.panel:hover {
+    border-color: rgba(184, 243, 107, 0.34);
+    transform: translateY(-3px);
+    background:
+        linear-gradient(140deg, rgba(34, 211, 198, 0.1), transparent 42%),
+        var(--panel-strong);
+}
+
+.card:hover::after {
+    transform: scaleX(1);
 }
 
 .card p {
     margin: 18px 0 8px;
-    color: #9fb0c8;
+    color: var(--muted);
 }
 
 .card strong {
@@ -114,6 +204,7 @@ h1 {
     align-items: center;
     font-size: 44px;
     line-height: 1;
+    color: var(--text);
 }
 
 .iconBox {
@@ -121,9 +212,11 @@ h1 {
     width: 52px;
     height: 52px;
     place-items: center;
-    border-radius: 18px;
-    background: rgba(37, 99, 235, 0.18);
-    color: #93c5fd;
+    border-radius: 8px;
+    background: rgba(34, 211, 198, 0.12);
+    color: var(--teal);
+    box-shadow: inset 0 0 0 1px rgba(34, 211, 198, 0.2);
+    animation: iconPulse 3.2s ease-in-out infinite;
 }
 
 .layout {
@@ -134,6 +227,10 @@ h1 {
 
 .panel {
     padding: 24px;
+    transition:
+        transform 220ms ease,
+        border-color 220ms ease,
+        background 220ms ease;
 }
 
 .panelHeader {
@@ -161,12 +258,14 @@ h1 {
 
 .chatHeader p {
     margin: 6px 0 0;
-    color: #9fb0c8;
+    color: var(--muted);
 }
 
 .toggleButton {
     padding: 9px 12px;
-    background: rgba(37, 99, 235, 0.3);
+    color: var(--text);
+    background: rgba(255, 115, 92, 0.18);
+    box-shadow: none;
 }
 
 .infraList {
@@ -179,8 +278,14 @@ h1 {
     justify-content: space-between;
     gap: 20px;
     padding: 14px 0;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
-    color: #9fb0c8;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    transition: color 180ms ease, transform 180ms ease;
+}
+
+.infraRow:hover {
+    color: var(--text);
+    transform: translateX(4px);
 }
 
 .infraRow:last-child {
@@ -188,7 +293,7 @@ h1 {
 }
 
 .infraRow strong {
-    color: #86efac;
+    color: var(--lime);
 }
 
 .messages {
@@ -200,24 +305,25 @@ h1 {
 .message {
     max-width: 85%;
     padding: 14px 16px;
-    border-radius: 18px;
+    border-radius: 8px;
     line-height: 1.5;
+    animation: messageIn 420ms ease-out both;
 }
 
 .message.assistant {
     justify-self: start;
-    background: rgba(30, 41, 59, 0.95);
-    color: #dbeafe;
+    background: rgba(25, 35, 43, 0.95);
+    color: #dff8f5;
 }
 
 .message.user {
     justify-self: end;
-    background: #2563eb;
-    color: white;
+    background: linear-gradient(135deg, var(--coral), #f59e0b);
+    color: #1b0d08;
 }
 
 .message code {
-    color: #93c5fd;
+    color: var(--teal);
 }
 
 .chatInput {
@@ -228,12 +334,20 @@ h1 {
 
 .chatInput input {
     width: 100%;
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    border-radius: 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
     padding: 14px 16px;
     outline: none;
-    background: rgba(15, 23, 42, 0.9);
-    color: white;
+    background: rgba(8, 12, 16, 0.82);
+    color: var(--text);
+    transition:
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.chatInput input:focus {
+    border-color: rgba(34, 211, 198, 0.68);
+    box-shadow: 0 0 0 3px rgba(34, 211, 198, 0.12);
 }
 
 .chatInput button {
@@ -245,8 +359,8 @@ h1 {
 .errorBox {
     margin-bottom: 18px;
     padding: 16px 18px;
-    color: #fecaca;
-    background: rgba(127, 29, 29, 0.35);
+    color: #ffd4cc;
+    background: rgba(151, 47, 31, 0.34);
 }
 
 .spin {
@@ -256,6 +370,74 @@ h1 {
 @keyframes spin {
     to {
         transform: rotate(360deg);
+    }
+}
+
+@keyframes pageIn {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes messageIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes iconPulse {
+    0%,
+    100% {
+        box-shadow:
+            inset 0 0 0 1px rgba(34, 211, 198, 0.2),
+            0 0 0 rgba(34, 211, 198, 0);
+    }
+
+    50% {
+        box-shadow:
+            inset 0 0 0 1px rgba(34, 211, 198, 0.36),
+            0 0 34px rgba(34, 211, 198, 0.16);
+    }
+}
+
+@keyframes gridDrift {
+    to {
+        background-position: 44px 44px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
 
